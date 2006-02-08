@@ -1,4 +1,5 @@
 \name{resistors}
+\docType{data}
 \alias{resistors}
 \title{Resistance of One-half-ohm Resistors }
 \description{
@@ -30,16 +31,16 @@
 data(resistors)
 str(resistors)
 attach(resistors)
-## construct data from frequency summary, taking all observations
-## at midpoints of intervals
+### Construct data from frequency summary, taking all observations
+### at midpoints of intervals
 resistances <- rep(midpoints,counts)
 hist(resistances)
-log.hist(resistances)
-## fit the hyperbolic distribution
-fit.hyperb(resistances) 
+logHist(resistances)
+## Fit the hyperbolic distribution
+hyperbFit(resistances) 
 
-## actually fit.hyperb can deal with frequency data
-fit.hyperb(midpoints, freq=counts)
+## Actually fit.hyperb can deal with frequency data
+hyperbFit(midpoints, freq=counts)
 
 }
 \keyword{datasets}

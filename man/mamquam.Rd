@@ -1,6 +1,7 @@
 \name{mamquam}
+\docType{data}
 \alias{mamquam}
-\title{Size of gravel from Mamquam River}
+\title{Size of Gravels from Mamquam River}
 \usage{data(mamquam)}
 \description{
   Size of gravels collected from a sandbar in the Mamquam River,
@@ -35,15 +36,14 @@
 data(mamquam)
 str(mamquam)
 attach(mamquam)
-## construct data from frequency summary, taking all observations
-## at midpoints of intervals
-psi <- rep(midpoints,counts) 
-summary(psi)
-## fit the hyperbolic distribution
-fit.hyperb(psi)
+### Construct data from frequency summary, taking all observations
+### at midpoints of intervals
+psi <- rep(midpoints, counts)
+barplot(table(psi))
+### Fit the hyperbolic distribution
+hyperbFit(psi)
 
-## actually fit.hyperb can deal with frequency data
-fit.hyperb(midpoints, freq=counts)
-
+### Actually hyperbFit can deal with frequency data
+hyperbFit(midpoints, freq=counts)
 }
 \keyword{datasets}
