@@ -68,7 +68,7 @@
     
   \code{hyperbFitStartMoM} returns only the method of moments estimates
   as a vector with elements \code{pi}, \code{lZeta} (log of zeta),
-  \code{lDelta} (log of delta), and \code{mu}.}
+  \code{lDelta} (log of delta), and \code{mu}.
 }
 
 \references{

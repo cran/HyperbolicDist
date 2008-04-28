@@ -28,7 +28,7 @@ kurtosis(x, na.rm = FALSE)
     N^(-1) sd(x)^(-4) sum_i (x_i - mean(x))^4 - 3.}
 }
   
-}
+
 \value{
   The skewness or kurtosis of \code{x}.
 }

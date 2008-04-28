@@ -5,13 +5,14 @@
 \usage{
 \method{summary}{hyperbFit}(object, ...)
 
-\method{print}{summary.hyperbFit}(x, digits = max(3, getOption("digits") - 3), ...)
+\method{print}{summary.hyperbFit}(object, digits = max(3, getOption("digits") - 3), ...)
 }
 \arguments{
-  \item{object}{An object of class \code{"hyperbFit"}, resulting from a
-    call to \code{\link{hyperbFit}}.}
-  \item{x}{An object of class \code{"summary.hyperbFit"}, resulting from a
-    call to \code{summary.hyperbFit}.}
+  \item{object}{In \code{summary.hyperbFit} an object of class
+    \code{"hyperbFit"}, resulting from a call to
+    \code{\link{hyperbFit}}. In \code{summary.hyperbFit} an object of
+      class \code{"summary.hyperbFit"}, resulting from a call to
+      \code{summary.hyperbFit}.}
   \item{digits}{The number of significant digits to use when printing.}
   \item{\dots}{Further arguments passed to or from other methods.}
 }
@@ -35,7 +36,7 @@
   \eqn{\delta}{delta}, and \eqn{\mu}{mu}, and adds them to \code{object}
   as \code{object$sds}. Otherwise, no calculations are performed and the
   composition of \code{object} is unaltered.
-  
+
   \code{summary.hyperbFit} invisibly returns \code{object}
   with class  changed to \code{summary.hyperbFit}.
 
@@ -46,9 +47,9 @@
 	\code{\link{print.hyperbFit}} when the Hessian is not available from
 	the fit. When the Hessian is available, the standard errors for the
 	parameter estimates are printed in parentheses beneath the parameter
-	estimates, in the manner of \code{\link{fitdistr}} in the package
+	estimates, in the manner of \code{fitdistr} in the package
 	\code{MASS}.
-	
+
 }
 \seealso{
   \code{\link{hyperbFit}}, \code{\link{summary}}.

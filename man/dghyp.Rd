@@ -54,11 +54,11 @@ ghypBreaks(Theta, small = 10^(-6), tiny = 10^(-10), deriv = 0.3, ...)
   The generalized hyperbolic distribution has density
 
 	\deqn{f(x)=c(\lambda,\alpha,\beta,\delta)\times%
-		\frac{K_{\lambda-1}(\alpha\sqrt{\delta^2+(x-\mu)^2})}%
+		\frac{K_{\lambda-1/2}(\alpha\sqrt{\delta^2+(x-\mu)^2})}%
 		{(\sqrt{\delta^2+(x-\mu)^2}/\alpha)^{1/2-\lambda}}%
 		e^{\beta(x-\mu)}}{%
 	f(x)=c(lambda,alpha,beta,delta)%
-		(K_(lambda-1)(alpha sqrt(delta^2+(x-mu)^2)))/%
+		(K_(lambda-1/2)(alpha sqrt(delta^2+(x-mu)^2)))/%
 		((sqrt(delta^2+(x-mu)^2)/alpha)^(1/2-lambda))%
 		exp(beta(x-mu))}
 

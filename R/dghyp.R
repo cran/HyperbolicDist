@@ -23,14 +23,31 @@ dghyp <- function(x, Theta)
     stop("absolute value of beta must be less than alpha")
   }
   gamma <- sqrt(alpha^2 - beta^2)
-  
-  aLambda <- (gamma/delta)^lambda/
-    (sqrt(2*pi)*alpha^(lambda - 1/2)
-     *besselK(x = delta*gamma, nu = lambda))
 
-  aLambda*(sqrt(delta^2 + (x - mu)^2))^(lambda - 1/2)*
-    besselK(x = alpha*sqrt(delta^2 + (x - mu)^2),
-            nu=(lambda - 1/2))*exp(beta*(x - mu))
+  ## Argument of Bessel K function in numerator
+  y <- alpha*sqrt(delta^2 + (x - mu)^2)
+  bx <- beta*(x - mu)
+  ## Deal with underflow in ratio of Bessel K functions
+  ## besselK underflows for x > 740
+  ## Use exponentially scaled besselK
+  if(delta*gamma > 700){# underflow in constant part
+    expTerm <- exp(delta*gamma - y + bx)
+    besselRatio <- besselK(x = y, nu = lambda -1/2, expon.scaled = TRUE)/
+      besselK(x = delta*gamma, nu = lambda, expon.scaled = TRUE)  
+    expAndBessel <- expTerm*besselRatio
+  }else{
+    expAndBessel <- ifelse(y > 700|bx > 700, # underflow in variable part
+                           exp(delta*gamma - y + bx)*
+                           besselK(x = y, nu = lambda -1/2,
+                                   expon.scaled = TRUE)/
+                           besselK(x = delta*gamma, nu = lambda,
+                                   expon.scaled = TRUE),
+                          exp(bx)*besselK(x = y, nu = lambda -1/2)/
+                          besselK(x = delta*gamma, nu = lambda))
+  }
+  dens <- (y/alpha)^(lambda - 1/2)*((gamma/delta)^lambda)*
+    alpha^(1/2-lambda)*expAndBessel/sqrt(2*pi)
+  dens
 } ## End of dghyp()
 
 
@@ -376,49 +393,6 @@ qghyp <- function(p, Theta, small = 10^(-6), tiny = 10^(-10),
   return(qSort[rank(p)]) 
 } # End of qghyp()
 
-
-### Function to generate random observations from a
-### (generalized) hyperbolic distribution using the
-### mixing property of the generalized inverse
-### Gaussian distribution.
-rghyp <- function(n, Theta){
-  if(length(Theta) == 4) Theta <- c(1,Theta)
-  if(length (Theta) != 5){
-    stop("parameter vector must contain 5 values") 
-  }
-  Theta <- as.numeric(Theta)
-  lambda <- Theta[1]
-  alpha <- Theta[2]
-  beta <- Theta[3]
-  delta <- Theta[4]
-  mu <- Theta[5]
-   
-  if (alpha <= 0) {
-    stop("alpha must be positive")
-  }
-  if (delta <= 0) {
-    stop("delta must be positive")
-  }
-  if (abs(beta) >= alpha) {
-    stop("absolute value of beta must be less than alpha")
-  }
-
-  chi <- delta^2
-  psi <- alpha^2 - beta^2
-
-  if(lambda == 1){
-    X <- rgig1(n, c(lambda,chi,psi))
-  } else{
-    X <- rgig(n, c(lambda,chi,psi))
-  }
-  
-  sigma <- sqrt(X)
-  Z <- rnorm(n)
-  Y <- mu + beta*sigma^2 + sigma*Z
-
-  Y
-} ## End of rghyp()
-
 ### Derivative of the density
 ddghyp <- function(x, Theta){
   if(length(Theta) == 4) Theta <- c(1, Theta)
@@ -523,3 +497,45 @@ ghypBreaks <- function(Theta, small = 10^(-6), tiny = 10^(-10),
   return(breaks)
 } ## End of ghypBreaks()
 
+
+### Function to generate random observations from a
+### (generalized) hyperbolic distribution using the
+### mixing property of the generalized inverse
+### Gaussian distribution.
+rghyp <- function(n, Theta){
+  if(length(Theta) == 4) Theta <- c(1,Theta)
+  if(length (Theta) != 5){
+    stop("parameter vector must contain 5 values") 
+  }
+  Theta <- as.numeric(Theta)
+  lambda <- Theta[1]
+  alpha <- Theta[2]
+  beta <- Theta[3]
+  delta <- Theta[4]
+  mu <- Theta[5]
+   
+  if (alpha <= 0) {
+    stop("alpha must be positive")
+  }
+  if (delta <= 0) {
+    stop("delta must be positive")
+  }
+  if (abs(beta) >= alpha) {
+    stop("absolute value of beta must be less than alpha")
+  }
+
+  chi <- delta^2
+  psi <- alpha^2 - beta^2
+
+  if(lambda == 1){
+    X <- rgig1(n, c(lambda,chi,psi))
+  } else{
+    X <- rgig(n, c(lambda,chi,psi))
+  }
+  
+  sigma <- sqrt(X)
+  Z <- rnorm(n)
+  Y <- mu + beta*sigma^2 + sigma*Z
+
+  Y
+} ## End of rghyp()

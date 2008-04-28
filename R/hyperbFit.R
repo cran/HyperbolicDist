@@ -26,7 +26,7 @@ hyperbFit <- function(x, freq = NULL, breaks = NULL, ThetaStart = NULL,
   breaks <- startInfo$breaks
   empDens <- startInfo$empDens
   midpoints <- startInfo$midpoints
-  
+
   llfunc <- function(Theta){
     KNu <- besselK(exp(Theta[2]), nu = 1)
     -sum(log(dhyperb(x, Theta, KNu = KNu, logPars = TRUE)))
@@ -45,9 +45,9 @@ hyperbFit <- function(x, freq = NULL, breaks = NULL, ThetaStart = NULL,
 
   if(method == "nlm"){
     ind <- c(2,1,5,4)
-    opOut <- nlm(llfunc, ThetaStart, hessian = hessian, 
+    opOut <- nlm(llfunc, ThetaStart, hessian = hessian,
                 iterlim = maxitNLM,...)
-  
+
   }
 
   Theta <- as.numeric(opOut[[ind[1]]])[1:4]       # parameter values
@@ -75,8 +75,8 @@ hyperbFit <- function(x, freq = NULL, breaks = NULL, ThetaStart = NULL,
   if(printOut == TRUE){
     print(fitResults, ...)
   }
-  if(plots == TRUE){ 
-    plot.hyperbFit(fitResults, ...) 
+  if(plots == TRUE){
+    plot.hyperbFit(fitResults, ...)
   }
   fitResults
 } ## End of hyperbFit()
@@ -84,30 +84,31 @@ hyperbFit <- function(x, freq = NULL, breaks = NULL, ThetaStart = NULL,
 
 ### Function to print object of class hyperbFit
 ### DJS 11/08/06
-print.hyperbFit <- function(x,
+print.hyperbFit <- function(object,
                             digits = max(3, getOption("digits") - 3), ...)
 {
-  if (!class(x) == "hyperbFit"){
+  if (!class(object) == "hyperbFit"){
     stop("Object must belong to class hyperbFit")
   }
-  cat("\nData:     ", x$xName, "\n")
+  cat("\nData:     ", object$xName, "\n")
   cat("Parameter estimates:\n")
-  print.default(format(x$Theta, digits = digits), 
+  print.default(format(object$Theta, digits = digits),
             print.gap = 2, quote = FALSE)
-  cat("Likelihood:        ", x$maxLik, "\n")
-  cat("Method:            ", x$method, "\n")
-  cat("Convergence code:  ", x$conv, "\n")
-  cat("Iterations:        ", x$iter, "\n")
-  invisible(x)
+  cat("Likelihood:        ", object$maxLik, "\n")
+  cat("Method:            ", object$method, "\n")
+  cat("Convergence code:  ", object$conv, "\n")
+  cat("Iterations:        ", object$iter, "\n")
+  invisible(object)
 } ## End of print.hyperbFit
 
 ### Function to plot results of fitting a hyperbolic distribution
 plot.hyperbFit <-
-function(x, which = 1:4,
+function(object, which = 1:4,
          plotTitles=paste(c("Histogram of ","Log-Histogram of ",
-                            "Q-Q Plot of ","P-P Plot of "), x$xName, sep=""),
-         ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){  
-  if (!class(x)=="hyperbFit")
+                            "Q-Q Plot of ","P-P Plot of "),
+                            object$xName, sep=""),
+         ask = prod(par("mfcol")) < length(which) && dev.interactive(), ...){
+  if (!class(object)=="hyperbFit")
     stop("Object must belong to class hyperbFit")
   if (ask) {
     op <- par(ask = TRUE)
@@ -116,16 +117,16 @@ function(x, which = 1:4,
   par(mar=c(6,4,4,2)+0.1)
   show <- rep(FALSE, 4)
   show[which] <- TRUE
-  Theta <- x$Theta
-  KNu <- x$KNu
-  breaks <- x$breaks
-  empDens <- x$empDens
-  mipoints <- x$midpoints
-  x <- x$x
-  xName <- x$xName
-  
+  Theta <- object$Theta
+  KNu <- object$KNu
+  breaks <- object$breaks
+  empDens <- object$empDens
+  mipoints <- object$midpoints
+  x <- object$x
+  xName <- object$xName
+
   hypDens <- function(x) dhyperb(x, Theta, KNu, logPars = FALSE)
-  
+
   logHypDens <- function(x) log(dhyperb(x, Theta, KNu = KNu, logPars = FALSE))
 
   ymax <- 1.06 * max(hypDens(seq(min(breaks), max(breaks), 0.1)),
@@ -147,7 +148,7 @@ function(x, which = 1:4,
           round(Theta[1], 3), ",", round(Theta[2], 3), ",",
           round(Theta[3], 3), ",", round(Theta[4], 3), ")", sep = ""))
   }
-  
+
   if (show[3]){
     qqhyperb(x, Theta, main = plotTitles[3], ...)
   }

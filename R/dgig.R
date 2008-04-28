@@ -418,7 +418,13 @@ rgig <- function(n, Theta){
   upper <- m
   while(g(upper) <= 0) upper <- 2*upper
 
-  yM <- uniroot(g, interval = c(0,m))$root
+  ##yM <- uniroot(g, interval = c(0, m))$root
+  ## Correct problem when psi and chi are very small
+  ## Code from Fabian Scheipl
+  ## Fabian.Scheipl@stat.uni-muenchen.de
+  yM <- uniroot(g, interval = c(0,m),
+                tol = min(.Machine$double.eps^0.25,
+                          (.Machine$double.eps +g(0)/10)))$root
 
   yP <- uniroot(g, interval = c(m,upper))$root
 

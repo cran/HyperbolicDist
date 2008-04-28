@@ -19,33 +19,33 @@ summary.hyperbFit <- function(object, ...)
 } ## End of summary.hyperbFit
 
 ### Print summary
-print.summary.hyperbFit <- function(x,
+print.summary.hyperbFit <- function(object,
                               digits = max(3, getOption("digits") - 3), ...)
 {
-  if (!class(x)=="summary.hyperbFit"){
+  if (!class(object)=="summary.hyperbFit"){
     stop("Object must belong to class summary.hyperbFit")
   }
-  cat("\nData:     ", x$xName, "\n")
+  cat("\nData:     ", object$xName, "\n")
   cat("Parameter estimates:\n")
-  if (is.null(x$sds)){
-    print.default(format(x$Theta, digits = digits), 
+  if (is.null(object$sds)){
+    print.default(format(object$Theta, digits = digits),
                   print.gap = 2, quote = FALSE)
   }else{
-    ans <- format(rbind(x$Theta, x$sds), digits = digits)
+    ans <- format(rbind(object$Theta, object$sds), digits = digits)
     ans[1, ] <- sapply(ans[1, ], function(x) paste("", x))
     ans[2, ] <- sapply(ans[2, ], function(x) paste("(", x, ")", sep = ""))
     dn <- dimnames(ans)
     dn[[1]] <- rep("", 2)
-    dn[[2]] <- paste(substring("      ", 1, (nchar(ans[2, ]) - 
+    dn[[2]] <- paste(substring("      ", 1, (nchar(ans[2, ]) -
         nchar(dn[[2]]))%/%2), dn[[2]])
-    dn[[2]] <- paste(dn[[2]], substring("      ", 1, (nchar(ans[2, 
+    dn[[2]] <- paste(dn[[2]], substring("      ", 1, (nchar(ans[2,
         ]) - nchar(dn[[2]]))%/%2))
     dimnames(ans) <- dn
     print.default(ans, print.gap = 2, quote = FALSE)
   }
-  cat("Likelihood:        ",x$maxLik,"\n")
-  cat("Method:            ",x$method,"\n")
-  cat("Convergence code:  ",x$conv,"\n")
-  cat("Iterations:        ",x$iter,"\n")
-  invisible(x)
+  cat("Likelihood:        ",object$maxLik,"\n")
+  cat("Method:            ",object$method,"\n")
+  cat("Convergence code:  ",object$conv,"\n")
+  cat("Iterations:        ",object$iter,"\n")
+  invisible(object)
 }
